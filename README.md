@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Developer Portfolio Application
 
-## Getting Started
+A high-performance modern developer portfolio with Next.js (App Router), TypeScript, Tailwind CSS, Supabase, and Vitest testing suite.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **My Work (Projects)**: Filter tabs (All, Featured, YouTube Demos), unlisted YouTube video embeds with privacy facade player and instant thumbnail previews, screenshots, tags, contributions, demo & repo links.
+- **About Me**: Bio narrative, professional highlights, and dynamic in-browser CV/Resume viewer with download and preview iframe.
+- **How to Reach**: Direct communication channels (Email with Copy button, Phone/WhatsApp, GitHub, LinkedIn, Location).
+- **All-in-One Admin Dashboard (`/admin`)**: 100% of the content displayed on the site can be edited from the dashboard:
+  - Edit name, title, bio, and upload new CV PDF files to cloud storage.
+  - Edit email, phone, GitHub URL, LinkedIn URL, and location.
+  - Add, edit, or delete projects with unlisted YouTube URLs or screenshots.
+  - Future visual live editor blueprint documented for Phase 3!
+
+## 🧪 Testing (Vitest & React Testing Library)
+
+To run the complete test suite:
+
+```cmd
+npm test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For watch mode:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```cmd
+npm run test:watch
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 💻 Running the App
 
-## Learn More
+```cmd
+cd d:\Frontend\portfolio\app
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Visit [http://localhost:3000](http://localhost:3000) for the public portfolio and [http://localhost:3000/admin](http://localhost:3000/admin) for the admin portal.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🗄️ Supabase Setup (Optional for Cloud Sync)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Create a free project at [supabase.com](https://supabase.com).
+2. Go to the **SQL Editor** in Supabase, paste the contents of `supabase_schema.sql`, and execute it.
+3. In `Project Settings > API`, copy your project URL and anon key.
+4. Create a `.env.local` file in this directory:
 
-## Deploy on Vercel
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Create your admin user in Supabase under **Authentication > Users > Add user**.
+6. Sign in at `http://localhost:3000/admin/login` to manage your portfolio!
