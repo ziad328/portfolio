@@ -61,4 +61,13 @@ describe('ContactSection Component', () => {
 
     expect(writeTextMock).toHaveBeenCalledWith('jane@example.com');
   });
+
+  it('shows the Get In Touch CTA only when there is an email', () => {
+    const { unmount } = render(<ContactSection profile={mockProfile} />);
+    expect(screen.getByRole('link', { name: /email jane@example.com/i })).toHaveTextContent('Get In Touch');
+    unmount();
+
+    render(<ContactSection profile={{ ...mockProfile, email: '' }} />);
+    expect(screen.queryByText('Get In Touch')).not.toBeInTheDocument();
+  });
 });
