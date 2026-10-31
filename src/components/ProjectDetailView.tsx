@@ -7,8 +7,23 @@ import TextReveal from './TextReveal';
 import AnimatedSection from './AnimatedSection';
 import MediaViewer from './MediaViewer';
 
+// Screenshots alternate between a full-width row and a two-column row
+export function showcaseRows(screenshots: string[]) {
+  const rows: string[][] = [];
+  for (let i = 0; i < screenshots.length; ) {
+    const size = rows.length % 2 === 0 ? 1 : 2;
+    rows.push(screenshots.slice(i, i + size));
+    i += size;
+  }
+  return rows;
+}
+
+const subheading = 'font-display text-[clamp(1.5rem,3vw,2rem)] font-semibold uppercase tracking-tight';
+
 export default function ProjectDetailView({ project }: { project: Project }) {
   const meta = projectMeta(project);
+  const highlights = project.highlights ?? [];
+  const rows = showcaseRows(project.screenshots ?? []);
 
   return (
     <article className="mx-auto max-w-7xl px-4 pb-24 pt-10 sm:px-6 sm:pt-14 lg:px-8">
@@ -56,7 +71,7 @@ export default function ProjectDetailView({ project }: { project: Project }) {
       </header>
 
       <AnimatedSection>
-        <div className="mt-14 overflow-hidden rounded-(--card-radius) md:mt-20">
+        <div className="mt-14 overflow-hidden rounded-(--card-radius-lg) md:mt-20">
           <MediaViewer
             mediaType={project.mediaType}
             mediaUrl={project.mediaUrl}
@@ -65,6 +80,67 @@ export default function ProjectDetailView({ project }: { project: Project }) {
           />
         </div>
       </AnimatedSection>
+
+      {highlights.length > 0 && (
+        <AnimatedSection>
+          <dl className="mt-16 grid grid-cols-1 border-y border-border sm:grid-cols-3 md:mt-24">
+            {highlights.map((h, i) => (
+              // Label first for screen readers, value shown on top
+              <div key={i} className="flex flex-col-reverse gap-3 border-border py-8 sm:px-8 sm:first:pl-0 sm:not-first:border-l max-sm:not-first:border-t">
+                <dt className="font-mono text-xs uppercase tracking-[0.12em] text-fg-muted">{h.label}</dt>
+                <dd className="font-display text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-none tracking-tight">
+                  {h.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </AnimatedSection>
+      )}
+
+      {(project.description || project.contributions.length > 0) && (
+        <div className="mt-16 max-w-[65ch] space-y-14 md:mt-24">
+          {project.description && (
+            <AnimatedSection>
+              <h2 className={subheading}>Overview</h2>
+              <p className="mt-5 whitespace-pre-line text-lg leading-[1.7] text-fg-muted">{project.description}</p>
+            </AnimatedSection>
+          )}
+          {project.contributions.length > 0 && (
+            <AnimatedSection>
+              <h2 className={subheading}>What I built</h2>
+              <ul className="mt-5 space-y-3 text-lg leading-[1.7] text-fg-muted">
+                {project.contributions.map((c, i) => (
+                  <li key={i} className="flex gap-4">
+                    <span aria-hidden="true" className="text-accent">→</span>
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </AnimatedSection>
+          )}
+        </div>
+      )}
+
+      {rows.length > 0 && (
+        <div className="mt-16 flex flex-col gap-4 md:mt-24 md:gap-6">
+          {rows.map((row, r) => (
+            <AnimatedSection key={r}>
+              <div className={`grid gap-4 md:gap-6 ${row.length === 2 ? 'md:grid-cols-[3fr_2fr]' : ''}`}>
+                {row.map((src, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={src + i}
+                    src={src}
+                    alt={`${project.title} screenshot`}
+                    loading="lazy"
+                    className={`w-full rounded-(--card-radius-lg) bg-surface object-cover ${row.length === 2 ? 'aspect-4/3 h-full' : 'aspect-video'}`}
+                  />
+                ))}
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      )}
     </article>
   );
 }
