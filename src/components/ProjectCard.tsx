@@ -1,5 +1,6 @@
 import { Project } from '@/types/portfolio';
 import MediaViewer from './MediaViewer';
+import TagPill from './TagPill';
 import { ExternalLink, Star } from 'lucide-react';
 import { GithubIcon } from '@/components/icons/Icons';
 
@@ -61,12 +62,7 @@ export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: Proj
         {/* Tags */}
         <div className="flex flex-wrap gap-1.5">
           {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full bg-neutral-800 px-2.5 py-0.5 text-xs text-neutral-400"
-            >
-              {tag}
-            </span>
+            <TagPill key={tag}>{tag}</TagPill>
           ))}
         </div>
 

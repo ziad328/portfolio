@@ -1,6 +1,7 @@
 import { SiteProfile } from '@/types/portfolio';
 import { ArrowDown, Mail, FileText } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '@/components/icons/Icons';
+import Button from '@/components/Button';
 
 interface HeroProps {
   profile: SiteProfile;
@@ -38,21 +39,15 @@ export default function Hero({ profile }: HeroProps) {
 
           {/* Action Buttons */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="#work"
-              className="flex items-center gap-2 rounded-xl bg-fg px-5 py-3 text-sm font-semibold text-bg transition-opacity hover:opacity-80"
-            >
+            <Button href="#work">
               <span>Explore My Work</span>
               <ArrowDown className="h-4 w-4" />
-            </a>
+            </Button>
 
-            <a
-              href="#about"
-              className="flex items-center gap-2 rounded-xl border border-border bg-surface px-5 py-3 text-sm font-semibold text-fg transition-colors hover:border-fg-muted hover:text-fg"
-            >
-              <FileText className="h-4 w-4 text-fg-muted" />
+            <Button href="#about" variant="ghost">
+              <FileText className="h-4 w-4" />
               <span>View CV / Resume</span>
-            </a>
+            </Button>
 
             <a
               href="#contact"

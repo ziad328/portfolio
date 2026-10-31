@@ -154,7 +154,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-neutral-100">
+    <div data-theme="dark" className="min-h-screen bg-black text-neutral-100">
       {/* Top Admin Navbar */}
       <header className="sticky top-0 z-40 border-b border-neutral-800 bg-neutral-950/90 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
