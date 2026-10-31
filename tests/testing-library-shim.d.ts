@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- loose types for helpers the shim does not list */
 // Type augmentation for @testing-library/react when @testing-library/dom peer dependency is resolving
 import '@testing-library/react';
 

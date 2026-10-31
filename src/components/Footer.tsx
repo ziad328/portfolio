@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
 import { SiteProfile } from '@/types/portfolio';
 import { ArrowUp } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '@/components/icons/Icons';
@@ -12,12 +12,12 @@ interface FooterProps {
 const footerLink = 'flex items-center gap-1.5 transition-colors hover:text-fg';
 
 export default function Footer({ profile }: FooterProps) {
-  // Set after mount so the server-rendered year can't mismatch the client's
-  const [currentYear, setCurrentYear] = useState<number>(2026);
-
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
-  }, []);
+  // The server (and hydration) render a fixed year, so it can't mismatch; the client swaps in the real one
+  const currentYear = useSyncExternalStore(
+    () => () => {},
+    () => new Date().getFullYear(),
+    () => 2026
+  );
 
   return (
     <footer className="border-t border-border py-10 font-mono text-xs uppercase tracking-[0.12em] text-fg-muted">

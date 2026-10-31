@@ -67,7 +67,7 @@ export default function Navbar({ name = 'Portfolio' }: NavbarProps) {
       <div className="flex h-14 items-center justify-between gap-4 pl-5 pr-2">
         {/* Brand */}
         <Link href="/" className="font-display text-sm font-bold uppercase tracking-tight">
-          <span className="font-mono font-normal text-fg-muted">// </span>
+          <span className="font-mono font-normal text-fg-muted">{'// '}</span>
           {name}
         </Link>
 
