@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-black px-4 py-12 text-neutral-100">
       <div className="w-full max-w-md">
         {/* Back Link */}
         <div className="mb-6">

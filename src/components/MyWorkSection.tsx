@@ -67,7 +67,7 @@ export default function MyWorkSection() {
   ];
 
   return (
-    <section id="work" className="py-20">
+    <section id="work" data-theme="dark" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <h2 className="text-3xl font-bold tracking-tight text-neutral-100">My Work</h2>

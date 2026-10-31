@@ -24,15 +24,15 @@ export default function Hero({ profile }: HeroProps) {
           </div>
 
           {/* Headline & Title */}
-          <h1 className="mt-6 max-w-4xl text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
-            Hi, I&apos;m <span className="bg-linear-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent">{profile.name}</span>
+          <h1 className="mt-6 max-w-4xl text-4xl font-extrabold tracking-tight text-fg sm:text-6xl">
+            Hi, I&apos;m <span className="text-accent">{profile.name}</span>
           </h1>
 
-          <p className="mt-4 text-xl sm:text-2xl font-semibold text-neutral-300">
+          <p className="mt-4 text-xl sm:text-2xl font-semibold text-fg-muted">
             {profile.title}
           </p>
 
-          <p className="mt-4 max-w-2xl text-base sm:text-lg leading-relaxed text-neutral-400">
+          <p className="mt-4 max-w-2xl text-base sm:text-lg leading-relaxed text-fg-muted">
             {profile.bio.length > 180 ? `${profile.bio.substring(0, 180)}...` : profile.bio}
           </p>
 
@@ -40,7 +40,7 @@ export default function Hero({ profile }: HeroProps) {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a
               href="#work"
-              className="flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-neutral-900 transition-colors hover:bg-neutral-200"
+              className="flex items-center gap-2 rounded-xl bg-fg px-5 py-3 text-sm font-semibold text-bg transition-opacity hover:opacity-80"
             >
               <span>Explore My Work</span>
               <ArrowDown className="h-4 w-4" />
@@ -48,15 +48,15 @@ export default function Hero({ profile }: HeroProps) {
 
             <a
               href="#about"
-              className="flex items-center gap-2 rounded-xl border border-neutral-700 bg-neutral-900/80 px-5 py-3 text-sm font-semibold text-neutral-200 transition-colors hover:border-neutral-500 hover:text-white"
+              className="flex items-center gap-2 rounded-xl border border-border bg-surface px-5 py-3 text-sm font-semibold text-fg transition-colors hover:border-fg-muted hover:text-fg"
             >
-              <FileText className="h-4 w-4 text-neutral-400" />
+              <FileText className="h-4 w-4 text-fg-muted" />
               <span>View CV / Resume</span>
             </a>
 
             <a
               href="#contact"
-              className="flex items-center gap-2 rounded-xl border border-transparent px-5 py-3 text-sm font-semibold text-neutral-400 transition-colors hover:text-white"
+              className="flex items-center gap-2 rounded-xl border border-transparent px-5 py-3 text-sm font-semibold text-fg-muted transition-colors hover:text-fg"
             >
               <Mail className="h-4 w-4" />
               <span>Get In Touch</span>
@@ -64,14 +64,14 @@ export default function Hero({ profile }: HeroProps) {
           </div>
 
           {/* Quick Social Handles */}
-          <div className="mt-12 flex items-center gap-5 text-neutral-500">
+          <div className="mt-12 flex items-center gap-5 text-fg-muted">
             {profile.githubUrl && (
               <a
                 href={profile.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub Profile"
-                className="transition-colors hover:text-white"
+                className="transition-colors hover:text-fg"
               >
                 <GithubIcon className="h-5 w-5" />
               </a>
@@ -82,7 +82,7 @@ export default function Hero({ profile }: HeroProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn Profile"
-                className="transition-colors hover:text-white"
+                className="transition-colors hover:text-fg"
               >
                 <LinkedinIcon className="h-5 w-5" />
               </a>
@@ -91,7 +91,7 @@ export default function Hero({ profile }: HeroProps) {
               <a
                 href={`mailto:${profile.email}`}
                 aria-label="Send Email"
-                className="transition-colors hover:text-white"
+                className="transition-colors hover:text-fg"
               >
                 <Mail className="h-5 w-5" />
               </a>

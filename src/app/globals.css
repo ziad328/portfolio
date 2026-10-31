@@ -1,21 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  /* ── Colors ─────────────────────────────── */
-  --bg-primary: #1a1a1a;
-  --bg-card: #242424;
-  --bg-elevated: #2e2e2e;
-  --text-primary: #ffffff;
-  --text-secondary: #999999;
-  --text-muted: #666666;
-  --accent: #ff4d1a;
-  --accent-hover: #ff6b3d;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-tag: rgba(255, 255, 255, 0.22);
-
-  /* ── Typography ──────────────────────────── */
-  --font-display: var(--font-bebas), 'Bebas Neue', 'Impact', sans-serif;
-  --font-body: var(--font-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
+  /* ── Colors: light "milky white" theme (default) ── */
+  --bg: #eeece7;
+  --fg: #0c0c0b;
+  --fg-muted: rgba(12, 12, 11, 0.6);
+  --border: rgba(12, 12, 11, 0.15);
+  --surface: rgba(12, 12, 11, 0.05);
+  --accent: #ff4500;
+  --accent-hover: #ff6a33;
 
   /* ── Spacing ─────────────────────────────── */
   --section-padding-y: clamp(80px, 10vw, 160px);
@@ -30,23 +23,52 @@
   --duration-slow: 1s;
 }
 
-/* ── Base ───────────────────────────────────── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* ── Colors: dark theme (projects section & detail page) ── */
+[data-theme='dark'] {
+  --bg: #0c0c0b;
+  --fg: #eeece7;
+  --fg-muted: rgba(238, 236, 231, 0.6);
+  --border: rgba(238, 236, 231, 0.15);
+  --surface: rgba(238, 236, 231, 0.07);
 }
 
+/* `inline` so utilities resolve the var where they're used, letting [data-theme] swap them */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  /* next/font variables come from layout.tsx */
+  --font-sans: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ── Base (Tailwind preflight already resets margin/padding/box-sizing) ── */
 html {
   scroll-behavior: smooth;
 }
 
+/* In a layer so Tailwind utilities can still override these */
+@layer base {
+  body,
+  [data-theme] {
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+}
+
 body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -59,8 +81,8 @@ body.cursor-custom * {
 
 /* ── Selection ──────────────────────────────── */
 ::selection {
-  background: rgba(255, 77, 26, 0.3);
-  color: #fff;
+  background: rgba(255, 69, 0, 0.3);
+  color: var(--fg);
 }
 
 /* ── Scrollbar ──────────────────────────────── */
@@ -68,14 +90,14 @@ body.cursor-custom * {
   width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-elevated);
+  background: var(--border);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: var(--fg-muted);
 }
 
 /* ── Marquee ────────────────────────────────── */
@@ -96,7 +118,7 @@ body.cursor-custom * {
 
 /* ── Accent glow button ─────────────────────── */
 .btn-accent-glow:hover {
-  box-shadow: 0 8px 32px rgba(255, 77, 26, 0.45), 0 2px 8px rgba(255, 77, 26, 0.2);
+  box-shadow: 0 8px 32px rgba(255, 69, 0, 0.45), 0 2px 8px rgba(255, 69, 0, 0.2);
 }
 
 /* ── Card hover clip ────────────────────────── */
