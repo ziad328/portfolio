@@ -8,12 +8,10 @@ import { fallbackProjects } from '@/data/static-fallback';
 import ProjectCard from './ProjectCard';
 import TextReveal from './TextReveal';
 import MarqueeTicker from './MarqueeTicker';
-
-type Filter = 'all' | 'featured' | 'videos';
+import AnimatedSection from './AnimatedSection';
 
 export default function MyWorkSection() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [filter, setFilter] = useState<Filter>('all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -56,61 +54,37 @@ export default function MyWorkSection() {
     load();
   }, []);
 
-  const filtered = projects.filter((p) => {
-    if (filter === 'featured') return p.featured;
-    if (filter === 'videos') return p.mediaType === 'youtube';
-    return true;
-  });
-
-  const tabs: { key: Filter; label: string }[] = [
-    { key: 'all', label: 'All Projects' },
-    { key: 'featured', label: 'Featured' },
-    { key: 'videos', label: 'Video Demos' },
-  ];
+  // Editorial layout: pairs of cards whose large/small columns swap every row
+  const rows: Project[][] = [];
+  for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2));
+  const rowColumns = (row: Project[], index: number) =>
+    row.length === 1 ? '' : index % 2 === 0 ? 'md:grid-cols-[1.8fr_1fr]' : 'md:grid-cols-[1fr_1.8fr]';
 
   return (
-    <section id="work" data-theme="dark" className="py-20">
+    <section id="work" data-theme="dark" className="pb-24 pt-20 sm:pb-32">
       <MarqueeTicker items={projects.flatMap((p) => p.tags)} />
-      <div className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12">
-          <TextReveal>
-            <h2 className="text-3xl font-bold tracking-tight text-neutral-100">My Work</h2>
-          </TextReveal>
-          <p className="mt-2 text-neutral-500">Featured projects and open-source contributions</p>
-        </div>
+      <div className="mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6 lg:px-8">
+        <TextReveal>
+          <h2 className="text-[clamp(2.5rem,7vw,6rem)] font-semibold uppercase leading-[0.9] tracking-[-0.03em]">
+            Selected Work
+          </h2>
+        </TextReveal>
 
-        {/* Filter tabs */}
-        <div className="mb-8 flex gap-2">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              id={`filter-${tab.key}`}
-              onClick={() => setFilter(tab.key)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                filter === tab.key
-                  ? 'bg-neutral-700 text-white'
-                  : 'text-neutral-400 hover:bg-neutral-800 hover:text-neutral-200'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {loading ? (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-96 animate-pulse rounded-xl bg-neutral-800" />
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="flex h-48 items-center justify-center rounded-xl border border-neutral-800 text-neutral-500">
-            No projects found for this filter.
-          </div>
+        {/* Nothing while loading; the cards fade in on their own once they arrive */}
+        {!loading && projects.length === 0 ? (
+          <p className="mt-12 font-mono text-xs uppercase tracking-[0.12em] text-fg-muted">
+            No projects yet.
+          </p>
         ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+          <div className="mt-12 flex flex-col gap-10 sm:mt-16 md:gap-14">
+            {rows.map((row, index) => (
+              <div key={row[0].id} className={`grid grid-cols-1 gap-10 md:gap-8 ${rowColumns(row, index)}`}>
+                {row.map((project) => (
+                  <AnimatedSection key={project.id}>
+                    <ProjectCard project={project} />
+                  </AnimatedSection>
+                ))}
+              </div>
             ))}
           </div>
         )}
