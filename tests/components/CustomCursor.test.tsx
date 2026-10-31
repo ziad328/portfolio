@@ -2,8 +2,6 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CustomCursor from '@/components/CustomCursor';
 
-vi.mock('next/navigation', () => ({ usePathname: () => '/' }));
-
 describe('CustomCursor', () => {
   afterEach(() => {
     vi.unstubAllGlobals();

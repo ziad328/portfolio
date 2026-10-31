@@ -1,13 +1,11 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
 import gsap from 'gsap';
 
 // A dot that follows the mouse and grows into a "VIEW ↗" circle over [data-cursor="view"].
-// Desktop only (fine pointer), and off for reduced motion and the admin pages.
+// Desktop only (fine pointer), and off for reduced motion. Mounted by app/(site)/layout.tsx, so never on /admin.
 export default function CustomCursor() {
-  const isAdmin = usePathname().startsWith('/admin');
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,9 +37,8 @@ export default function CustomCursor() {
       document.body.classList.remove('cursor-custom');
       gsap.killTweensOf(el);
     };
-  }, [isAdmin]);
+  }, []);
 
-  if (isAdmin) return null;
 
   // GSAP owns the outer transform, so the size change lives on the inner element's `scale`.
   // Blend mode sits on the outer element because it's the one that forms the stacking context.
