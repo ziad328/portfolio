@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/lib/utils';
 import { fallbackProjects } from '@/data/static-fallback';
 import ProjectCard from './ProjectCard';
+import TextReveal from './TextReveal';
 
 type Filter = 'all' | 'featured' | 'videos';
 
@@ -70,7 +71,9 @@ export default function MyWorkSection() {
     <section id="work" data-theme="dark" className="py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-100">My Work</h2>
+          <TextReveal>
+            <h2 className="text-3xl font-bold tracking-tight text-neutral-100">My Work</h2>
+          </TextReveal>
           <p className="mt-2 text-neutral-500">Featured projects and open-source contributions</p>
         </div>
 

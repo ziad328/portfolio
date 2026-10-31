@@ -2,6 +2,7 @@ import { SiteProfile } from '@/types/portfolio';
 import { ArrowDown, Mail, FileText } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '@/components/icons/Icons';
 import Button from '@/components/Button';
+import TextReveal from '@/components/TextReveal';
 
 interface HeroProps {
   profile: SiteProfile;
@@ -25,9 +26,11 @@ export default function Hero({ profile }: HeroProps) {
           </div>
 
           {/* Headline & Title */}
-          <h1 className="mt-6 max-w-4xl text-4xl font-extrabold tracking-tight text-fg sm:text-6xl">
-            Hi, I&apos;m <span className="text-accent">{profile.name}</span>
-          </h1>
+          <TextReveal key={profile.name}>
+            <h1 className="mt-6 max-w-4xl text-4xl font-extrabold tracking-tight text-fg sm:text-6xl">
+              Hi, I&apos;m <span className="text-accent">{profile.name}</span>
+            </h1>
+          </TextReveal>
 
           <p className="mt-4 text-xl sm:text-2xl font-semibold text-fg-muted">
             {profile.title}
