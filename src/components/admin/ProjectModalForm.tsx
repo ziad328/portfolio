@@ -10,7 +10,12 @@ import {
   validateMediaFile,
   parseTags,
   tagsToString,
+  slugify,
+  parseHighlights,
+  highlightsToString,
+  parseLines,
 } from '@/lib/utils';
+import { projectToRow } from '@/lib/projects';
 import { X, Image as ImageIcon, Sparkles, Upload, Loader2, AlertCircle } from 'lucide-react';
 import { YoutubeIcon } from '@/components/icons/Icons';
 
@@ -43,6 +48,10 @@ export default function ProjectModalForm({
   const [demoUrl, setDemoUrl] = useState(project?.demoUrl || '');
   const [repoUrl, setRepoUrl] = useState(project?.repoUrl || '');
   const [featured, setFeatured] = useState(project?.featured ?? false);
+  const [slug, setSlug] = useState(project?.slug || '');
+  const [year, setYear] = useState(project?.year || '');
+  const [highlightsInput, setHighlightsInput] = useState(highlightsToString(project?.highlights || []));
+  const [screenshotsInput, setScreenshotsInput] = useState((project?.screenshots || []).join('\n'));
 
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -53,8 +62,10 @@ export default function ProjectModalForm({
   const detectedYouTubeId = extractYouTubeId(youtubeUrl);
   const youtubeThumb = detectedYouTubeId ? getYouTubeThumbnailUrl(detectedYouTubeId) : null;
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Validates and uploads an image to storage, then hands its public URL to onUploaded
+  const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>, onUploaded: (url: string) => void) => {
     const file = e.target.files?.[0];
+    e.target.value = ''; // allow picking the same file again
     if (!file) return;
 
     const validation = validateMediaFile(file, 'image');
@@ -85,7 +96,7 @@ export default function ProjectModalForm({
         .from('portfolio-media')
         .getPublicUrl(data.path);
 
-      setMediaUrl(publicUrlData.publicUrl);
+      onUploaded(publicUrlData.publicUrl);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to upload screenshot.';
       setErrorMsg(message);
@@ -94,16 +105,17 @@ export default function ProjectModalForm({
     }
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => uploadImage(e, setMediaUrl);
+  const handleScreenshotUpload = (e: React.ChangeEvent<HTMLInputElement>) =>
+    uploadImage(e, (url) => setScreenshotsInput((prev) => (prev.trim() ? `${prev.trim()}\n${url}` : url)));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     setErrorMsg(null);
 
     const parsedTags = parseTags(tagsInput);
-    const parsedContributions = contributionsInput
-      .split('\n')
-      .map((c) => c.trim())
-      .filter(Boolean);
+    const parsedContributions = parseLines(contributionsInput);
 
     const projectData: Project = {
       id: project?.id || `proj-${Date.now()}`,
@@ -121,25 +133,16 @@ export default function ProjectModalForm({
       contributions: parsedContributions,
       orderIndex: project?.orderIndex ?? 0,
       createdAt: project?.createdAt || new Date().toISOString(),
+      // Empty slug falls back to the title, so every project gets a readable URL
+      slug: slugify(slug || title) || undefined,
+      year: year.trim() || undefined,
+      highlights: parseHighlights(highlightsInput),
+      screenshots: parseLines(screenshotsInput),
     };
 
     try {
       if (isSupabaseConfigured()) {
-        const dbPayload = {
-          title: projectData.title,
-          tagline: projectData.tagline,
-          description: projectData.description,
-          tags: projectData.tags,
-          media_type: projectData.mediaType,
-          media_url: projectData.mediaUrl || null,
-          youtube_url: projectData.youtubeUrl || null,
-          demo_url: projectData.demoUrl || null,
-          repo_url: projectData.repoUrl || null,
-          featured: projectData.featured,
-          role: projectData.role || null,
-          contributions: projectData.contributions,
-          order_index: projectData.orderIndex,
-        };
+        const dbPayload = projectToRow(projectData);
 
         if (isEditing && project?.id) {
           const { error } = await supabase
@@ -396,6 +399,83 @@ export default function ProjectModalForm({
                 onChange={(e) => setRepoUrl(e.target.value)}
                 placeholder="https://github.com/user/repo"
                 className="mt-1.5 block w-full rounded-xl border border-neutral-700 bg-neutral-950 px-3.5 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+              />
+            </div>
+          </div>
+
+          {/* Detail page fields */}
+          <div className="rounded-xl border border-neutral-800 bg-neutral-950/80 p-4 space-y-4">
+            <span className="block text-xs font-semibold text-neutral-300">Project Detail Page</span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="project-slug" className="block text-xs font-medium text-neutral-300">
+                  URL Slug
+                </label>
+                <input
+                  id="project-slug"
+                  type="text"
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                  placeholder={slugify(title) || 'ai-chat-platform'}
+                  className="mt-1.5 block w-full rounded-xl border border-neutral-700 bg-neutral-900 px-3.5 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+                />
+                <p className="mt-1 text-[11px] text-neutral-500">Leave empty to use the title.</p>
+              </div>
+
+              <div>
+                <label htmlFor="project-year" className="block text-xs font-medium text-neutral-300">
+                  Year
+                </label>
+                <input
+                  id="project-year"
+                  type="text"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  placeholder="2025"
+                  className="mt-1.5 block w-full rounded-xl border border-neutral-700 bg-neutral-900 px-3.5 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="project-highlights" className="block text-xs font-medium text-neutral-300">
+                Highlights (one per line: value | label)
+              </label>
+              <textarea
+                id="project-highlights"
+                rows={3}
+                value={highlightsInput}
+                onChange={(e) => setHighlightsInput(e.target.value)}
+                placeholder="100% | Content self-managed&#10;3 months | Development time"
+                className="mt-1.5 block w-full rounded-xl border border-neutral-700 bg-neutral-900 px-3.5 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between gap-3">
+                <label htmlFor="project-screenshots" className="block text-xs font-medium text-neutral-300">
+                  Extra Screenshots (one URL per line)
+                </label>
+                <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-neutral-700 bg-neutral-800 px-3 py-1.5 text-xs font-medium text-neutral-200 transition-colors hover:bg-neutral-700">
+                  {uploadingImage ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+                  <span>{uploadingImage ? 'Uploading...' : 'Upload & Add'}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleScreenshotUpload}
+                    disabled={uploadingImage}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              <textarea
+                id="project-screenshots"
+                rows={3}
+                value={screenshotsInput}
+                onChange={(e) => setScreenshotsInput(e.target.value)}
+                placeholder="https://.../screenshot-1.png&#10;https://.../screenshot-2.png"
+                className="mt-1.5 block w-full rounded-xl border border-neutral-700 bg-neutral-900 px-3.5 py-2 text-xs text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
             </div>
           </div>

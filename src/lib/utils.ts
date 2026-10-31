@@ -1,3 +1,5 @@
+import type { ProjectHighlight } from '@/types/portfolio';
+
 // ── YouTube ID Extraction ──────────────────────────────────────────────────────
 export function extractYouTubeId(url: string | undefined | null): string | null {
   if (!url) return null;
@@ -75,4 +77,36 @@ export function parseTags(raw: string): string[] {
 
 export function tagsToString(tags: string[]): string {
   return tags.join(', ');
+}
+
+// ── Detail Page Field Helpers ──────────────────────────────────────────────────
+export function slugify(text: string): string {
+  return text
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+// One highlight per line, written as "value | label"
+export function parseHighlights(raw: string): ProjectHighlight[] {
+  return raw
+    .split('\n')
+    .map((line) => {
+      const [value, ...rest] = line.split('|');
+      return { value: value.trim(), label: rest.join('|').trim() };
+    })
+    .filter((h) => h.value && h.label);
+}
+
+export function highlightsToString(highlights: ProjectHighlight[]): string {
+  return highlights.map((h) => `${h.value} | ${h.label}`).join('\n');
+}
+
+export function parseLines(raw: string): string[] {
+  return raw
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
 }

@@ -74,3 +74,10 @@ describe('ProjectCard Component', () => {
     expect(screen.getByRole('link')).not.toContainElement(screen.getByRole('button', { name: 'Edit' }));
   });
 });
+
+describe('ProjectCard year', () => {
+  it('prefers the explicit year over createdAt', () => {
+    render(<ProjectCard project={{ ...mockProject, year: '2023' }} />);
+    expect(screen.getByText('Lead Architect · 2023')).toBeInTheDocument();
+  });
+});

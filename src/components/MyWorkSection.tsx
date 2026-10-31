@@ -7,6 +7,7 @@ import { isSupabaseConfigured } from '@/lib/utils';
 import { fallbackProjects } from '@/data/static-fallback';
 import ProjectCard from './ProjectCard';
 import TextReveal from './TextReveal';
+import { rowToProject } from '@/lib/projects';
 import MarqueeTicker from './MarqueeTicker';
 import AnimatedSection from './AnimatedSection';
 
@@ -29,25 +30,7 @@ export default function MyWorkSection() {
       if (error || !data) {
         setProjects(fallbackProjects);
       } else {
-        setProjects(
-          data.map((r) => ({
-            id: r.id,
-            title: r.title,
-            tagline: r.tagline,
-            description: r.description,
-            tags: r.tags ?? [],
-            mediaType: r.media_type,
-            mediaUrl: r.media_url ?? undefined,
-            youtubeUrl: r.youtube_url ?? undefined,
-            demoUrl: r.demo_url ?? undefined,
-            repoUrl: r.repo_url ?? undefined,
-            featured: r.featured,
-            role: r.role ?? undefined,
-            contributions: r.contributions ?? [],
-            orderIndex: r.order_index,
-            createdAt: r.created_at,
-          }))
-        );
+        setProjects(data.map(rowToProject));
       }
       setLoading(false);
     }

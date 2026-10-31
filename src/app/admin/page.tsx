@@ -7,6 +7,7 @@ import { Project, SiteProfile } from '@/types/portfolio';
 import { supabase } from '@/lib/supabase/client';
 import { getSession, signOut } from '@/lib/supabase/auth-helper';
 import { isSupabaseConfigured } from '@/lib/utils';
+import { rowToProject } from '@/lib/projects';
 import { fallbackProfile, fallbackProjects } from '@/data/static-fallback';
 import ProfileEditorCard from '@/components/admin/ProfileEditorCard';
 import ContactEditorCard from '@/components/admin/ContactEditorCard';
@@ -73,25 +74,7 @@ export default function AdminDashboardPage() {
           .order('order_index', { ascending: true });
 
         if (projectsData && projectsData.length > 0) {
-          setProjects(
-            projectsData.map((r) => ({
-              id: r.id,
-              title: r.title,
-              tagline: r.tagline,
-              description: r.description,
-              tags: r.tags || [],
-              mediaType: r.media_type,
-              mediaUrl: r.media_url || undefined,
-              youtubeUrl: r.youtube_url || undefined,
-              demoUrl: r.demo_url || undefined,
-              repoUrl: r.repo_url || undefined,
-              featured: r.featured,
-              role: r.role || undefined,
-              contributions: r.contributions || [],
-              orderIndex: r.order_index,
-              createdAt: r.created_at,
-            }))
-          );
+          setProjects(projectsData.map(rowToProject));
         }
       }
       setLoading(false);

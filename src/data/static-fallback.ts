@@ -32,6 +32,14 @@ export const fallbackProjects: Project[] = [
       'Implemented conversation branching and history management',
     ],
     orderIndex: 0,
+    slug: 'ai-chat-platform',
+    year: '2025',
+    highlights: [
+      { value: '<200ms', label: 'First token latency' },
+      { value: '12', label: 'Agent tools' },
+      { value: '100%', label: 'TypeScript' },
+    ],
+    screenshots: [],
   },
   {
     id: 'ecommerce-platform',
@@ -52,6 +60,13 @@ export const fallbackProjects: Project[] = [
       'Reduced checkout latency by 60% via query optimization',
     ],
     orderIndex: 1,
+    slug: 'ecommerce-platform',
+    year: '2024',
+    highlights: [
+      { value: '60%', label: 'Faster checkout' },
+      { value: 'Stripe', label: 'Payments' },
+    ],
+    screenshots: [],
   },
   {
     id: 'devops-pipeline',
@@ -69,5 +84,9 @@ export const fallbackProjects: Project[] = [
       'Wrote Terraform modules for GKE cluster provisioning',
     ],
     orderIndex: 2,
+    slug: 'devops-pipeline',
+    year: '2024',
+    highlights: [],
+    screenshots: [],
   },
 ];

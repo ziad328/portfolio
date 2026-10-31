@@ -27,7 +27,7 @@ export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: Proj
     .map((w) => w[0])
     .join('')
     .toUpperCase();
-  const year = project.createdAt ? new Date(project.createdAt).getUTCFullYear() : undefined;
+  const year = project.year || (project.createdAt ? new Date(project.createdAt).getUTCFullYear() : undefined);
   const meta = [project.role, year].filter(Boolean).join(' · ');
 
   return (

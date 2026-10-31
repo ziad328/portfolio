@@ -16,6 +16,16 @@ export interface Project {
   contributions: string[]; // Bullet points of what you built
   orderIndex?: number;
   createdAt?: string;
+  // Detail page fields
+  slug?: string;           // URL-friendly name, e.g. "ai-chat-platform"
+  year?: string;           // Shown as "ROLE · YEAR"
+  highlights?: ProjectHighlight[]; // Stats grid, e.g. { value: '100%', label: 'Self-managed' }
+  screenshots?: string[];  // Extra screenshot URLs for the detail page
+}
+
+export interface ProjectHighlight {
+  value: string;
+  label: string;
 }
 
 export interface SiteProfile {

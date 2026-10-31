@@ -3,6 +3,10 @@ import {
   extractYouTubeId,
   validateMediaFile,
   isSupabaseConfigured,
+  slugify,
+  parseHighlights,
+  highlightsToString,
+  parseLines,
 } from '@/lib/utils';
 
 describe('extractYouTubeId', () => {
@@ -72,5 +76,29 @@ describe('validateMediaFile', () => {
 describe('isSupabaseConfigured', () => {
   it('returns false when environment variables are missing', () => {
     expect(isSupabaseConfigured()).toBe(false);
+  });
+});
+
+describe('detail page field helpers', () => {
+  it('slugify makes URL-safe slugs', () => {
+    expect(slugify('  AI Chat Platform! ')).toBe('ai-chat-platform');
+    expect(slugify('Café — Déjà Vu 2.0')).toBe('cafe-deja-vu-2-0');
+    expect(slugify('---')).toBe('');
+  });
+
+  it('parseHighlights reads "value | label" lines and skips incomplete ones', () => {
+    expect(parseHighlights('100% | Self-managed\n  3 months|Build time  \nno label\n| no value\n')).toEqual([
+      { value: '100%', label: 'Self-managed' },
+      { value: '3 months', label: 'Build time' },
+    ]);
+  });
+
+  it('highlightsToString round-trips with parseHighlights', () => {
+    const highlights = [{ value: '2', label: 'Languages | EN & AR' }];
+    expect(parseHighlights(highlightsToString(highlights))).toEqual(highlights);
+  });
+
+  it('parseLines trims and drops empty lines', () => {
+    expect(parseLines(' a \n\n b\n')).toEqual(['a', 'b']);
   });
 });
