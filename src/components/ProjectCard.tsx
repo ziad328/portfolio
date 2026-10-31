@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Project } from '@/types/portfolio';
 import { extractYouTubeId, getYouTubeThumbnailUrl } from '@/lib/utils';
+import { projectMeta } from '@/lib/projects';
 import TagPill from './TagPill';
 
 interface ProjectCardProps {
@@ -27,13 +28,12 @@ export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: Proj
     .map((w) => w[0])
     .join('')
     .toUpperCase();
-  const year = project.year || (project.createdAt ? new Date(project.createdAt).getUTCFullYear() : undefined);
-  const meta = [project.role, year].filter(Boolean).join(' · ');
+  const meta = projectMeta(project);
 
   return (
     <article>
       <Link
-        href={`/projects/${project.id}`}
+        href={`/projects/${project.slug ?? project.id}`}
         className="group block rounded-(--card-radius) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
       >
         <div data-cursor="view" className="card-image-wrap relative aspect-16/10 bg-surface">

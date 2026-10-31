@@ -57,7 +57,6 @@ describe('MediaViewer Component', () => {
     );
 
     expect(screen.getByText('TP')).toBeInTheDocument();
-    expect(screen.getByText('Test Project')).toBeInTheDocument();
   });
 
   it('renders fallback card when youtubeUrl is invalid', () => {

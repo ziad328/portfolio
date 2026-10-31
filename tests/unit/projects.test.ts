@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { rowToProject, projectToRow, ProjectRow } from '@/lib/projects';
+import { rowToProject, projectToRow, findProject, projectMeta, ProjectRow } from '@/lib/projects';
 
 const row: ProjectRow = {
   id: 'p1',
@@ -33,5 +33,21 @@ describe('project row mapping', () => {
     const highlights = [{ value: '100%', label: 'Self-managed' }];
     const project = rowToProject({ ...row, slug: 'app', year: '2025', highlights, screenshots: ['https://x/1.png'] });
     expect(projectToRow(project)).toMatchObject({ slug: 'app', year: '2025', highlights, screenshots: ['https://x/1.png'] });
+  });
+});
+
+describe('findProject', () => {
+  const projects = [rowToProject(row), rowToProject({ ...row, id: 'p2', slug: 'my-app' })];
+
+  it('matches by slug or by id, and returns undefined for unknown keys', () => {
+    expect(findProject(projects, 'my-app')?.id).toBe('p2');
+    expect(findProject(projects, 'p2')?.id).toBe('p2');
+    expect(findProject(projects, 'p1')?.id).toBe('p1');
+    expect(findProject(projects, 'nope')).toBeUndefined();
+  });
+
+  it('builds ROLE · YEAR, falling back to the createdAt year', () => {
+    expect(projectMeta(rowToProject({ ...row, role: 'Lead', year: '2024' }))).toBe('Lead · 2024');
+    expect(projectMeta(rowToProject(row))).toBe('2025');
   });
 });

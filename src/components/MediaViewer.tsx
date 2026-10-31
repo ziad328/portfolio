@@ -21,13 +21,8 @@ function Fallback({ title }: { title: string }) {
     .toUpperCase();
 
   return (
-    <div className="flex h-48 w-full items-center justify-center bg-linear-to-br from-neutral-800 to-neutral-900 rounded-t-xl">
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-neutral-700 text-xl font-bold text-neutral-300">
-          {initials}
-        </div>
-        <span className="text-xs text-neutral-500 max-w-40 text-center line-clamp-2">{title}</span>
-      </div>
+    <div className="flex aspect-video w-full items-center justify-center bg-surface font-display text-6xl font-semibold text-fg-muted sm:text-8xl">
+      {initials}
     </div>
   );
 }
@@ -43,7 +38,7 @@ export default function MediaViewer({ mediaType, mediaUrl, youtubeUrl, title }: 
     const embedUrl = getYouTubeEmbedUrl(videoId);
 
     return (
-      <div className="relative h-48 w-full overflow-hidden rounded-t-xl bg-black">
+      <div className="relative aspect-video w-full overflow-hidden bg-black">
         {playing ? (
           <iframe
             src={embedUrl}
@@ -62,14 +57,14 @@ export default function MediaViewer({ mediaType, mediaUrl, youtubeUrl, title }: 
             <img
               src={thumbUrl}
               alt={`${title} video thumbnail`}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 transition-colors group-hover:bg-black/50">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-600 shadow-lg transition-transform group-hover:scale-110">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent shadow-lg transition-transform group-hover:scale-110">
                 <Play className="h-6 w-6 fill-white text-white" />
               </div>
             </div>
-            <div className="absolute bottom-2 left-2 rounded bg-black/70 px-2 py-0.5 text-xs text-white">
+            <div className="absolute bottom-4 left-4 rounded-full bg-black/70 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-white">
               Watch Demo
             </div>
           </button>
@@ -80,7 +75,7 @@ export default function MediaViewer({ mediaType, mediaUrl, youtubeUrl, title }: 
 
   if (mediaType === 'image' && mediaUrl) {
     return (
-      <div className="h-48 w-full overflow-hidden rounded-t-xl bg-neutral-900">
+      <div className="aspect-video w-full overflow-hidden bg-surface">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={mediaUrl}

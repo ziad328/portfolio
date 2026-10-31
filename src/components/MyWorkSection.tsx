@@ -2,12 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { Project } from '@/types/portfolio';
-import { supabase } from '@/lib/supabase/client';
-import { isSupabaseConfigured } from '@/lib/utils';
-import { fallbackProjects } from '@/data/static-fallback';
 import ProjectCard from './ProjectCard';
 import TextReveal from './TextReveal';
-import { rowToProject } from '@/lib/projects';
+import { getProjects } from '@/lib/projects';
 import MarqueeTicker from './MarqueeTicker';
 import AnimatedSection from './AnimatedSection';
 
@@ -16,25 +13,10 @@ export default function MyWorkSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function load() {
-      if (!isSupabaseConfigured()) {
-        setProjects(fallbackProjects);
-        setLoading(false);
-        return;
-      }
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('order_index', { ascending: true });
-
-      if (error || !data) {
-        setProjects(fallbackProjects);
-      } else {
-        setProjects(data.map(rowToProject));
-      }
+    getProjects().then((data) => {
+      setProjects(data);
       setLoading(false);
-    }
-    load();
+    });
   }, []);
 
   // Editorial layout: pairs of cards whose large/small columns swap every row

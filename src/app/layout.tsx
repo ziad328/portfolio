@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Space_Grotesk, Figtree, JetBrains_Mono } from 'next/font/google';
 import SmoothScroll from '@/components/SmoothScroll';
 import CustomCursor from '@/components/CustomCursor';
@@ -37,8 +38,11 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${figtree.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col">
-        <SmoothScroll />
-        <CustomCursor />
+        {/* Both read usePathname(), which Cache Components only allows inside Suspense on dynamic routes */}
+        <Suspense>
+          <SmoothScroll />
+          <CustomCursor />
+        </Suspense>
         {children}
       </body>
     </html>

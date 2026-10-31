@@ -1,4 +1,7 @@
 import { MediaType, Project, ProjectHighlight } from '@/types/portfolio';
+import { supabase } from '@/lib/supabase/client';
+import { isSupabaseConfigured } from '@/lib/utils';
+import { fallbackProjects } from '@/data/static-fallback';
 
 // A row of the Supabase `projects` table (see supabase_schema.sql)
 export interface ProjectRow {
@@ -69,4 +72,25 @@ export function projectToRow(p: Project) {
     highlights: p.highlights ?? [],
     screenshots: p.screenshots ?? [],
   };
+}
+
+// All projects in display order: Supabase when configured, otherwise (or on error) the fallback data
+export async function getProjects(): Promise<Project[]> {
+  if (!isSupabaseConfigured()) return fallbackProjects;
+  const { data, error } = await supabase
+    .from('projects')
+    .select('*')
+    .order('order_index', { ascending: true });
+  return error || !data ? fallbackProjects : data.map(rowToProject);
+}
+
+// Detail URLs use the slug when there is one, else the id
+export function findProject(projects: Project[], slugOrId: string) {
+  return projects.find((p) => p.slug === slugOrId || p.id === slugOrId);
+}
+
+// "ROLE · YEAR"; the year falls back to createdAt for projects saved before the year field
+export function projectMeta(project: Project) {
+  const year = project.year || (project.createdAt ? new Date(project.createdAt).getUTCFullYear() : undefined);
+  return [project.role, year].filter(Boolean).join(' · ');
 }
