@@ -15,7 +15,7 @@ export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: Proj
   return (
     <article className="flex flex-col overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 transition-colors hover:border-neutral-700">
       {/* Media */}
-      <div className="relative">
+      <div className="relative" data-cursor="view">
         <MediaViewer
           mediaType={project.mediaType}
           mediaUrl={project.mediaUrl}
