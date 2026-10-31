@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import TransitionLink from './TransitionLink';
 import { Project } from '@/types/portfolio';
 import { projectHref, projectMeta, thumbnailUrl } from '@/lib/projects';
 import Button from './Button';
@@ -27,12 +27,12 @@ export default function ProjectDetailView({ project, next }: { project: Project;
 
   return (
     <article className="mx-auto max-w-7xl px-4 pb-24 pt-10 sm:px-6 sm:pt-14 lg:px-8">
-      <Link
+      <TransitionLink
         href="/#work"
         className="font-mono text-xs uppercase tracking-[0.12em] text-fg-muted transition-colors hover:text-fg"
       >
         ← All projects
-      </Link>
+      </TransitionLink>
 
       <header className="mt-12 grid gap-10 md:mt-20 md:grid-cols-[1.5fr_1fr] md:items-end md:gap-16">
         <div>
@@ -70,16 +70,15 @@ export default function ProjectDetailView({ project, next }: { project: Project;
         </AnimatedSection>
       </header>
 
-      <AnimatedSection>
-        <div className="mt-14 overflow-hidden rounded-(--card-radius-lg) md:mt-20">
-          <MediaViewer
-            mediaType={project.mediaType}
-            mediaUrl={project.mediaUrl}
-            youtubeUrl={project.youtubeUrl}
-            title={project.title}
-          />
-        </div>
-      </AnimatedSection>
+      {/* Not wrapped in AnimatedSection: a project card's image flies onto this spot (lib/pageTransition) */}
+      <div data-flip-target className="mt-14 overflow-hidden rounded-(--card-radius-lg) md:mt-20">
+        <MediaViewer
+          mediaType={project.mediaType}
+          mediaUrl={project.mediaUrl}
+          youtubeUrl={project.youtubeUrl}
+          title={project.title}
+        />
+      </div>
 
       {highlights.length > 0 && (
         <AnimatedSection>
@@ -165,12 +164,12 @@ function NextCase({ project }: { project: Project }) {
       <div className="flex items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.12em]">
         <span className="text-fg-muted">Next case</span>
         {/* z-10 keeps it clickable above the title link, whose ::after covers the whole card */}
-        <Link href="/#work" className="relative z-10 text-fg-muted transition-colors hover:text-fg">
+        <TransitionLink href="/#work" className="relative z-10 text-fg-muted transition-colors hover:text-fg">
           ← All projects
-        </Link>
+        </TransitionLink>
       </div>
 
-      <Link
+      <TransitionLink
         href={projectHref(project)}
         data-cursor="view"
         className="mt-10 block font-display text-[clamp(2.5rem,7vw,6rem)] font-semibold uppercase leading-[0.9] tracking-[-0.03em] after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:mt-16"
@@ -179,7 +178,7 @@ function NextCase({ project }: { project: Project }) {
         <span aria-hidden="true" className="inline-block text-accent transition-transform duration-500 group-hover:translate-x-3">
           →
         </span>
-      </Link>
+      </TransitionLink>
 
       {project.tags.length > 0 && (
         <div className="mt-8 flex flex-wrap gap-2">

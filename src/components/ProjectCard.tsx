@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import TransitionLink from './TransitionLink';
 import { Project } from '@/types/portfolio';
 import { projectHref, projectMeta, thumbnailUrl } from '@/lib/projects';
 import TagPill from './TagPill';
@@ -22,11 +22,12 @@ export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: Proj
 
   return (
     <article>
-      <Link
+      <TransitionLink
         href={projectHref(project)}
+        flip
         className="group block rounded-(--card-radius) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
       >
-        <div data-cursor="view" className="card-image-wrap relative aspect-16/10 bg-surface">
+        <div data-cursor="view" data-flip-source className="card-image-wrap relative aspect-16/10 bg-surface">
           {/* Shown when there's no media, or when the image fails and hides itself */}
           <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center font-display text-5xl font-semibold text-fg-muted">
             {initials}
@@ -44,7 +45,7 @@ export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: Proj
           )}
 
           {project.tags.length > 0 && (
-            <div className="absolute inset-x-0 bottom-0 flex flex-wrap justify-end gap-2 bg-linear-to-t from-black/70 to-transparent p-4 pt-12">
+            <div data-flip-skip className="absolute inset-x-0 bottom-0 flex flex-wrap justify-end gap-2 bg-linear-to-t from-black/70 to-transparent p-4 pt-12">
               {project.tags.slice(0, 3).map((tag) => (
                 <TagPill key={tag}>{tag}</TagPill>
               ))}
@@ -52,7 +53,7 @@ export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: Proj
           )}
 
           {/* The custom cursor already says VIEW; this pill covers keyboard focus and devices without it */}
-          <span className="pointer-events-none absolute left-1/2 top-1/2 -translate-1/2 rounded-full bg-accent px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 [.cursor-custom_&]:hidden">
+          <span data-flip-skip className="pointer-events-none absolute left-1/2 top-1/2 -translate-1/2 rounded-full bg-accent px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 [.cursor-custom_&]:hidden">
             View ↗
           </span>
         </div>
@@ -63,7 +64,7 @@ export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: Proj
         {meta && (
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.12em] text-fg-muted">{meta}</p>
         )}
-      </Link>
+      </TransitionLink>
 
       {isAdmin && (
         <div className="mt-3 flex gap-2">
