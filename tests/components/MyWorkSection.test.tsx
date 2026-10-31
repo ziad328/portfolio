@@ -11,9 +11,9 @@ describe('MyWorkSection', () => {
 
     // Card -> AnimatedSection div -> row grid
     const rows = [...new Set(cards.map((card) => card.parentElement!.parentElement!))];
-    expect(rows[0].className).toContain('md:grid-cols-[1.8fr_1fr]');
+    expect(rows[0].className).toContain('lg:grid-cols-[1.8fr_1fr]');
     expect(rows[0].children).toHaveLength(2);
-    expect(rows[1].className).not.toContain('md:grid-cols-[');
+    expect(rows[1].className).not.toContain('lg:grid-cols-[');
     expect(rows[1].children).toHaveLength(1);
   });
 });

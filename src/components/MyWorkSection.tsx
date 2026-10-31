@@ -19,11 +19,12 @@ export default function MyWorkSection() {
     });
   }, []);
 
-  // Editorial layout: pairs of cards whose large/small columns swap every row
+  // Editorial layout: pairs of cards whose large/small columns swap every row.
+  // Starts at lg: on tablets the narrow card is too small for its tag overlay.
   const rows: Project[][] = [];
   for (let i = 0; i < projects.length; i += 2) rows.push(projects.slice(i, i + 2));
   const rowColumns = (row: Project[], index: number) =>
-    row.length === 1 ? '' : index % 2 === 0 ? 'md:grid-cols-[1.8fr_1fr]' : 'md:grid-cols-[1fr_1.8fr]';
+    row.length === 1 ? '' : index % 2 === 0 ? 'lg:grid-cols-[1.8fr_1fr]' : 'lg:grid-cols-[1fr_1.8fr]';
 
   return (
     <section id="work" data-theme="dark" className="pb-24 pt-20 sm:pb-32">
@@ -43,7 +44,7 @@ export default function MyWorkSection() {
         ) : (
           <div className="mt-12 flex flex-col gap-10 sm:mt-16 md:gap-14">
             {rows.map((row, index) => (
-              <div key={row[0].id} className={`grid grid-cols-1 gap-10 md:gap-8 ${rowColumns(row, index)}`}>
+              <div key={row[0].id} className={`grid grid-cols-1 gap-10 lg:gap-8 ${rowColumns(row, index)}`}>
                 {row.map((project) => (
                   <AnimatedSection key={project.id}>
                     <ProjectCard project={project} />
