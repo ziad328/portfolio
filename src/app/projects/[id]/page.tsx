@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { findProject, getProjects, nextProject } from '@/lib/projects';
 import ProjectDetailView from '@/components/ProjectDetailView';
+import PageTransition from '@/components/PageTransition';
 
 // Projects are edited from /admin without a redeploy, so they're read per request, not cached.
 // Cache Components needs that runtime work (params + Supabase) inside a Suspense boundary.
@@ -17,5 +18,9 @@ async function ProjectContent({ slugOrId }: { slugOrId: string }) {
   const projects = await getProjects();
   const project = findProject(projects, slugOrId);
   if (!project) notFound();
-  return <ProjectDetailView project={project} next={nextProject(projects, project)} />;
+  return (
+    <PageTransition>
+      <ProjectDetailView project={project} next={nextProject(projects, project)} />
+    </PageTransition>
+  );
 }

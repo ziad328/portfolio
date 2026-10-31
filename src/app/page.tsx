@@ -11,6 +11,7 @@ import MyWorkSection from '@/components/MyWorkSection';
 import AboutSection from '@/components/AboutSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
+import PageTransition from '@/components/PageTransition';
 
 export default function HomePage() {
   const [profile, setProfile] = useState<SiteProfile>(fallbackProfile);
@@ -51,13 +52,16 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar name={profile.name} />
-      <main className="flex-1">
-        <Hero profile={profile} />
-        <MyWorkSection />
-        <AboutSection profile={profile} />
-        <ContactSection profile={profile} />
-      </main>
-      <Footer profile={profile} />
+      {/* The fixed Navbar stays outside, so the transition's transform never moves it */}
+      <PageTransition>
+        <main>
+          <Hero profile={profile} />
+          <MyWorkSection />
+          <AboutSection profile={profile} />
+          <ContactSection profile={profile} />
+        </main>
+        <Footer profile={profile} />
+      </PageTransition>
     </div>
   );
 }
