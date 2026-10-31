@@ -7,6 +7,7 @@ import { isSupabaseConfigured } from '@/lib/utils';
 import { fallbackProjects } from '@/data/static-fallback';
 import ProjectCard from './ProjectCard';
 import TextReveal from './TextReveal';
+import MarqueeTicker from './MarqueeTicker';
 
 type Filter = 'all' | 'featured' | 'videos';
 
@@ -69,7 +70,8 @@ export default function MyWorkSection() {
 
   return (
     <section id="work" data-theme="dark" className="py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <MarqueeTicker items={projects.flatMap((p) => p.tags)} />
+      <div className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <TextReveal>
             <h2 className="text-3xl font-bold tracking-tight text-neutral-100">My Work</h2>

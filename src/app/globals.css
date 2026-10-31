@@ -105,6 +105,11 @@ body.cursor-custom * {
   animation: marquee 22s linear infinite;
   will-change: transform;
 }
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
 
 /* ── Mask-up text reveal ────────────────────── */
 .mask-container {
