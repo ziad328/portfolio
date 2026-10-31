@@ -48,10 +48,6 @@
 }
 
 /* ── Base (Tailwind preflight already resets margin/padding/box-sizing) ── */
-html {
-  scroll-behavior: smooth;
-}
-
 /* In a layer so Tailwind utilities can still override these */
 @layer base {
   body,

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Space_Grotesk, Figtree, JetBrains_Mono } from 'next/font/google';
+import SmoothScroll from '@/components/SmoothScroll';
 import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
@@ -32,9 +33,10 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${spaceGrotesk.variable} ${figtree.variable} ${jetbrainsMono.variable} scroll-smooth h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${figtree.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col">
+        <SmoothScroll />
         {children}
       </body>
     </html>
