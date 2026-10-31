@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { SiteProfile } from '@/types/portfolio';
+import AnimatedSection from './AnimatedSection';
 import { Mail, Phone, MapPin, Copy, Check } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '@/components/icons/Icons';
 
@@ -25,6 +26,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
 
   return (
     <section id="contact" className="py-20 border-t border-neutral-800/60 bg-neutral-950">
+      <AnimatedSection>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <h2 className="text-3xl font-bold tracking-tight text-neutral-100">How to Reach Me</h2>
@@ -159,6 +161,7 @@ export default function ContactSection({ profile }: ContactSectionProps) {
           </div>
         )}
       </div>
+      </AnimatedSection>
     </section>
   );
 }

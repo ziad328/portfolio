@@ -1,6 +1,7 @@
 'use client';
 
 import { SiteProfile } from '@/types/portfolio';
+import AnimatedSection from './AnimatedSection';
 import ResumeViewer from './ResumeViewer';
 import { UserCheck, Award, Code2 } from 'lucide-react';
 
@@ -11,6 +12,7 @@ interface AboutSectionProps {
 export default function AboutSection({ profile }: AboutSectionProps) {
   return (
     <section id="about" className="py-20 border-t border-neutral-800/60 bg-neutral-900/40">
+      <AnimatedSection>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <h2 className="text-3xl font-bold tracking-tight text-neutral-100">About Me</h2>
@@ -70,6 +72,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
           </div>
         </div>
       </div>
+      </AnimatedSection>
     </section>
   );
 }
