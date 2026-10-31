@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Project } from '@/types/portfolio';
-import { extractYouTubeId, getYouTubeThumbnailUrl } from '@/lib/utils';
-import { projectMeta } from '@/lib/projects';
+import { projectHref, projectMeta, thumbnailUrl } from '@/lib/projects';
 import TagPill from './TagPill';
 
 interface ProjectCardProps {
@@ -9,15 +8,6 @@ interface ProjectCardProps {
   isAdmin?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
-}
-
-// Cards show a still preview; the YouTube player lives on the detail page.
-function thumbnailUrl(project: Project) {
-  if (project.mediaType === 'image') return project.mediaUrl;
-  if (project.mediaType === 'youtube') {
-    const videoId = extractYouTubeId(project.youtubeUrl);
-    return videoId ? getYouTubeThumbnailUrl(videoId) : undefined;
-  }
 }
 
 export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: ProjectCardProps) {
@@ -33,7 +23,7 @@ export default function ProjectCard({ project, isAdmin, onEdit, onDelete }: Proj
   return (
     <article>
       <Link
-        href={`/projects/${project.slug ?? project.id}`}
+        href={projectHref(project)}
         className="group block rounded-(--card-radius) focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
       >
         <div data-cursor="view" className="card-image-wrap relative aspect-16/10 bg-surface">

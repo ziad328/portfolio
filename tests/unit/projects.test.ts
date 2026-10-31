@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { rowToProject, projectToRow, findProject, projectMeta, ProjectRow } from '@/lib/projects';
+import { rowToProject, projectToRow, findProject, projectMeta, nextProject, ProjectRow } from '@/lib/projects';
 
 const row: ProjectRow = {
   id: 'p1',
@@ -49,5 +49,18 @@ describe('findProject', () => {
   it('builds ROLE · YEAR, falling back to the createdAt year', () => {
     expect(projectMeta(rowToProject({ ...row, role: 'Lead', year: '2024' }))).toBe('Lead · 2024');
     expect(projectMeta(rowToProject(row))).toBe('2025');
+  });
+});
+
+describe('nextProject', () => {
+  const [a, b, c] = ['a', 'b', 'c'].map((id) => rowToProject({ ...row, id }));
+
+  it('returns the following project and wraps from last to first', () => {
+    expect(nextProject([a, b, c], a)).toBe(b);
+    expect(nextProject([a, b, c], c)).toBe(a);
+  });
+
+  it('returns nothing when there is only one project', () => {
+    expect(nextProject([a], a)).toBeUndefined();
   });
 });

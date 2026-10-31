@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { findProject, getProjects } from '@/lib/projects';
+import { findProject, getProjects, nextProject } from '@/lib/projects';
 import ProjectDetailView from '@/components/ProjectDetailView';
 
 // Projects are edited from /admin without a redeploy, so they're read per request, not cached.
@@ -14,7 +14,8 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 }
 
 async function ProjectContent({ slugOrId }: { slugOrId: string }) {
-  const project = findProject(await getProjects(), slugOrId);
+  const projects = await getProjects();
+  const project = findProject(projects, slugOrId);
   if (!project) notFound();
-  return <ProjectDetailView project={project} />;
+  return <ProjectDetailView project={project} next={nextProject(projects, project)} />;
 }

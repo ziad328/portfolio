@@ -45,4 +45,13 @@ describe('ProjectDetailView', () => {
     expect(screen.getByText('Built it')).toBeInTheDocument();
     expect(screen.getAllByAltText('Bare App screenshot')).toHaveLength(3);
   });
+
+  it('links the next case by slug, and leaves it out when there is no next project', () => {
+    const { container, rerender } = render(<ProjectDetailView project={bare} />);
+    expect(screen.queryByText('Next case')).toBeNull();
+
+    rerender(<ProjectDetailView project={bare} next={{ ...bare, id: 'p2', slug: 'second', title: 'Second App' }} />);
+    expect(screen.getByText('Next case')).toBeInTheDocument();
+    expect(container.querySelector('a[href="/projects/second"]')).toHaveTextContent('Second App');
+  });
 });

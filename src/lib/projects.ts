@@ -1,6 +1,6 @@
 import { MediaType, Project, ProjectHighlight } from '@/types/portfolio';
 import { supabase } from '@/lib/supabase/client';
-import { isSupabaseConfigured } from '@/lib/utils';
+import { extractYouTubeId, getYouTubeThumbnailUrl, isSupabaseConfigured } from '@/lib/utils';
 import { fallbackProjects } from '@/data/static-fallback';
 
 // A row of the Supabase `projects` table (see supabase_schema.sql)
@@ -85,6 +85,10 @@ export async function getProjects(): Promise<Project[]> {
 }
 
 // Detail URLs use the slug when there is one, else the id
+export function projectHref(project: Project) {
+  return `/projects/${project.slug ?? project.id}`;
+}
+
 export function findProject(projects: Project[], slugOrId: string) {
   return projects.find((p) => p.slug === slugOrId || p.id === slugOrId);
 }
@@ -93,4 +97,20 @@ export function findProject(projects: Project[], slugOrId: string) {
 export function projectMeta(project: Project) {
   const year = project.year || (project.createdAt ? new Date(project.createdAt).getUTCFullYear() : undefined);
   return [project.role, year].filter(Boolean).join(' · ');
+}
+
+// The project after this one, wrapping from last to first; none when it's the only project
+export function nextProject(projects: Project[], current: Project) {
+  if (projects.length < 2) return undefined;
+  const index = projects.findIndex((p) => p.id === current.id);
+  return projects[(index + 1) % projects.length];
+}
+
+// A still preview: the screenshot, or the YouTube thumbnail
+export function thumbnailUrl(project: Project) {
+  if (project.mediaType === 'image') return project.mediaUrl || undefined;
+  if (project.mediaType === 'youtube') {
+    const videoId = extractYouTubeId(project.youtubeUrl);
+    return videoId ? getYouTubeThumbnailUrl(videoId) : undefined;
+  }
 }
